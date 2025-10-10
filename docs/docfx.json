@@ -1,0 +1,40 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,htm,html,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+	  "modern",
+	  "templates/my-template"
+    ],
+    "globalMetadata": {
+      "_appName": "  kyRoof",
+      "_appTitle": "SkyRoof",
+      "_appLogoPath": "images/s_over_the_globe.svg",
+      "_appFaviconPath": "images/SkyRoof.ico",      
+	  "_enableSearch": true,
+	  "pdfFileName": "skyroof_users_guide.pdf",
+	  "pdfTocPage": true,
+	  "pdfCoverPage": "users_guide/pdf_cover.html",
+	  "_disableContribution": true,
+    "_googleAnalyticsTagId": "G-1MMW827H44"
+    }
+  }
+}

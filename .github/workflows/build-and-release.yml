@@ -1,0 +1,109 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.2)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Determine version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1
+
+      - name: Restore NuGet packages
+        run: nuget restore SkyRoof.sln
+
+      - name: Update .csproj with version from input or tag
+        run: |
+          $version = "${{ steps.get_version.outputs.version }}"
+          $csproj = "SkyRoof/SkyRoof.csproj"
+          (Get-Content $csproj) -replace '<Version>.*?</Version>', "<Version>$version</Version>" |
+            ForEach-Object { $_ -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$version</AssemblyVersion>" } |
+            ForEach-Object { $_ -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$version</FileVersion>" } |
+            Set-Content $csproj
+        shell: pwsh
+
+      - name: Build WinForms App
+        run: msbuild SkyRoof.sln /p:Configuration=Release
+
+      - name: Install Inno Setup
+        run: choco upgrade innosetup --yes --no-progress
+        shell: powershell
+
+      - name: Patch .iss file with version
+        run: |
+          $version = "${{ steps.get_version.outputs.version }}"
+          $issFile = 'install\SkyRoof.iss'
+          (Get-Content $issFile) -replace '#define MyAppVersion ".*?"', "#define MyAppVersion `"$version`"" | Set-Content $issFile
+        shell: pwsh
+
+      - name: Package with Inno Setup
+        run: '"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "install\SkyRoof.iss"'
+        shell: cmd
+
+      - name: Upload Unsigned Artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          path: 'install\Output\SkyRoofSetup.exe'
+
+      - name: Sign
+        uses: signpath/github-action-submit-signing-request@v1.1
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          organization-id: '3bf60771-cf88-4c93-81c6-6cc8896015c3'
+          project-slug: 'SkyRoof'
+          signing-policy-slug: 'release-signing'
+          github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: install
+
+      - name: Copy and Zip Installer
+        run: |
+          $version = "${{ steps.get_version.outputs.version }}"
+          $versionedName = "SkyRoofSetup-v.$version"
+
+          Copy-Item install\SkyRoofSetup.exe -Destination "install\$versionedName.exe"
+          Compress-Archive -Path install\$versionedName.exe -DestinationPath install\$versionedName.zip
+          Get-ChildItem -Path install\*.* -recurse
+        shell: pwsh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: SkyRoof v.${{ steps.get_version.outputs.version }}
+          tag_name: v.${{ steps.get_version.outputs.version }}
+          body: See [Version History](https://ve3nea.github.io/SkyRoof/download.html).
+          # body: This is an experimental build, please ignore.
+          files:  install/SkyRoofSetup-v.${{ steps.get_version.outputs.version }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

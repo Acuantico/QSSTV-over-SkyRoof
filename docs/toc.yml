@@ -1,0 +1,11 @@
+pdf: false
+name: SkyRoof Wehsite
+items:
+    - name: Download
+      href: download.md
+    - name: User's Guide
+      href: users_guide/
+    - name: Credits
+      href: credits.md
+    - name: Source Code
+      href: https://github.com/VE3NEA/SkyRoof

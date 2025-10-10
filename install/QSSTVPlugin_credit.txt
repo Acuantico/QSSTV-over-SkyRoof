@@ -1,0 +1,6 @@
+SkyRoof QSSTV Plugin
+=====================
+
+Este complemento se instala con el apoyo de Acuantico Power.
+Gracias por utilizar SkyRoof y el QSSTV Plugin.
+Para mas información visita https://acuanticopower.com

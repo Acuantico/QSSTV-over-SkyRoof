@@ -1,0 +1,93 @@
+pdf: true
+name: User's Guide
+items:
+  - name: Overview
+    href: overview.md
+  - name: System Requirements
+    href: system_requirements.md
+  - name: Setting Up
+    items:
+    - name: Quick Start
+      href: quick_start.md
+    - name: Creating Satellite Groups
+      href: creating_satellite_groups.md
+    - name: Configuring Window Layout
+      href: configuring_window_layout.md
+    - name: Setting Up SDR
+      href: setting_up_sdr.md
+    - name: Calibrating PPM Correction
+      href: calibrating_ppm_correction.md
+    - name: Setting Up Audio
+      href: setting_up_audio.md
+    - name: Setting Up Output Stream
+      href: setting_up_output_stream.md
+    - name: Setting Up Voice Announcements
+      href: setting_up_voice_announcements.md
+    - name: Setting Up CAT Control
+      href: setting_up_cat_control.md
+    - name: Setting Up Rotator Control
+      href: setting_up_rotator_control.md
+  - name: User Interface
+    items:
+    - name: Satellites and Groups Window
+      href: satellites_and_groups_window.md
+    - name: Satellite Details Window
+      href: satellite_details_window.md
+    - name: Satellite Highlighting
+      href: satellite_highlighting.md
+    - name: Settings Window
+      href: settings_window.md
+  - name: Toolbar
+    items:
+    - name: Satellite Selector
+      href: satellite_selector.md
+    - name: Frequency Control
+      href: frequency_control.md
+    - name: Gain Control
+      href: gain_control.md
+    - name: Rotator Control
+      href: rotator_control.md
+  - name: Panels
+    items:
+    - name: Current Group
+      href: current_group_panel.md
+    - name: Satellite Details
+      href: satellite_details_panel.md
+    - name: Satellite Transmitters
+      href: satellite_transmitters_panel.md
+    - name: Satellite Passes
+      href: satellite_passes_panel.md
+    - name: Frequency Scale
+      href: frequency_scale.md
+    - name: Waterfall Display
+      href: waterfall_display.md
+    - name: Time Line
+      href: time_line_panel.md
+    - name: Sky View
+      href: sky_view_panel.md
+    - name: Earth View
+      href: earth_view_panel.md
+    - name: QSO Entry
+      href: qso_entry_panel.md
+  - name: How To
+    items:
+    - name: Decode Telemetry from PEARL-1C
+      href: decode_telemetry.md
+    - name: Recevie Images from NOAA-15 and NOAA-19
+      href: recevie_images.md
+    - name: Recevie SSTV from ISS
+      href: recevie_sstv.md
+    - name: Receive FSK & AFSK Telemetry
+      href: fsk_afsk_telemetry.md
+  - name: Miscellaneous
+    items:
+    - name: Satellite Data
+      href: satellite_data.md
+    - name: Doppler Tracking
+      href: doppler_tracking.md
+    - name: Data Folder
+      href: data_folder.md
+    - name: Smart Antenna Rotation
+      href: smart_antenna_rotation.md
+    - name: F.A.Q.
+      href: faq.md

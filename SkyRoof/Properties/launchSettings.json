@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SkyRoof": {
+      "commandName": "Project",
+      "hotReloadEnabled": false,
+      "nativeDebugging": true
+    }
+  }
+}
