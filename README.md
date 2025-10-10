@@ -23,3 +23,5 @@ Add-on para integrar QSSTV dentro de SkyRoof y así recibir y decodificar imáge
    & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" .\install\QSSTVPlugin.iss
    ```
    El ejecutable resultante quedará en `install\SkyRoof_QSSTV_Plugin_Setup.exe`.
+
+Si prefieres evitar la compilación local, puedes descargar el instalador ya generado en [acuanticopower.com/qsstv-over-skiroof](https://acuanticopower.com/qsstv-over-skiroof).
