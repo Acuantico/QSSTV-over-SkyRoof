@@ -36,8 +36,8 @@ Source: ..\SkyRoof\bin\x64\Release\net9.0-windows7.0\SkyRoof.dll; DestDir: {app}
 Source: ..\SkyRoof\bin\x64\Release\net9.0-windows7.0\SkyRoof.exe; DestDir: {app}; Flags: ignoreversion overwritereadonly
 Source: ..\SkyRoof\bin\x64\Release\net9.0-windows7.0\SkyRoof.deps.json; DestDir: {app}; Flags: ignoreversion overwritereadonly
 Source: ..\SkyRoof\bin\x64\Release\net9.0-windows7.0\SkyRoof.runtimeconfig.json; DestDir: {app}; Flags: ignoreversion overwritereadonly
-Source: ..\SkyRoof\native\{#MyAppPluginDll}; DestDir: {app}; Flags: ignoreversion overwritereadonly
-Source: ..\SkyRoof\native\{#MyAppPluginDll}; DestDir: {app}\native; Flags: ignoreversion overwritereadonly
+Source: ..\SkyRoof\bin\x64\Release\net9.0-windows7.0\native\{#MyAppPluginDll}; DestDir: {app}; Flags: ignoreversion overwritereadonly
+Source: ..\SkyRoof\bin\x64\Release\net9.0-windows7.0\native\{#MyAppPluginDll}; DestDir: {app}\native; Flags: ignoreversion overwritereadonly
 
 [Dirs]
 Name: {app}\native

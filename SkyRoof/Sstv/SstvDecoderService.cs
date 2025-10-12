@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Serilog;
 
 namespace SkyRoof.Sstv;
 
@@ -12,6 +13,7 @@ public sealed class SstvDecoderService : IDisposable
   private readonly IntPtr _handle;
   private readonly SynchronizationContext? _syncContext;
   private bool _disposed;
+  private bool _loggedSample;
 
   public event EventHandler<SstvImageEventArgs>? ImageDecoded;
 
@@ -74,6 +76,29 @@ public sealed class SstvDecoderService : IDisposable
       var managed = new byte[(int)nativeImage.Length];
       Marshal.Copy(nativeImage.Data, managed, 0, managed.Length);
 
+      if (!_loggedSample && managed.Length >= 9)
+      {
+        var samplePoints = new List<(int X, int Y, string Label)>
+        {
+          (0, 0, "P0"),
+          (Math.Min(20, width - 1), Math.Min(20, height - 1), "P1"),
+          (Math.Min(width / 2, width - 1), Math.Min(height / 2, height - 1), "P2")
+        };
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append($"len={managed.Length} complete={nativeImage.Complete} ");
+        foreach (var (x, y, label) in samplePoints)
+        {
+          int idx = (y * width + x) * 3;
+          if (idx + 2 < managed.Length)
+          {
+            sb.Append($"{label}[{x},{y}]={managed[idx]}/{managed[idx + 1]}/{managed[idx + 2]} ");
+          }
+        }
+        Log.Information("SSTV sample buffer {Info}", sb.ToString());
+        _loggedSample = true;
+      }
+
       var bitmap = CreateBitmap(width, height, managed);
       DispatchImage(bitmap, nativeImage.Complete);
     }
@@ -109,19 +134,21 @@ public sealed class SstvDecoderService : IDisposable
     try
     {
       int srcStride = width * 3;
-      int dstStride = bmpData.Stride;
+      int dstStride = Math.Abs(bmpData.Stride);
+      bool flip = bmpData.Stride < 0;
 
       unsafe
       {
         fixed (byte* srcPtr = data)
         {
           byte* srcBase = srcPtr;
-          byte* destBase = (byte*)bmpData.Scan0;
+          byte* scan0 = (byte*)bmpData.Scan0;
 
           for (int y = 0; y < height; y++)
           {
             byte* srcRow = srcBase + (y * srcStride);
-            byte* destRow = destBase + (y * dstStride);
+            int destRowIndex = flip ? (height - 1 - y) : y;
+            byte* destRow = scan0 + (destRowIndex * dstStride);
 
             for (int x = 0; x < width; x++)
             {
@@ -132,9 +159,9 @@ public sealed class SstvDecoderService : IDisposable
               byte g = srcRow[srcIndex + 1];
               byte b = srcRow[srcIndex + 2];
 
-              destRow[destIndex] = b;         // B
-              destRow[destIndex + 1] = g;     // G
-              destRow[destIndex + 2] = r;     // R
+              destRow[destIndex] = b;
+              destRow[destIndex + 1] = g;
+              destRow[destIndex + 2] = r;
             }
           }
         }
