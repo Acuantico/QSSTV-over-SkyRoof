@@ -115,13 +115,27 @@ public sealed class SstvDecoderService : IDisposable
       {
         fixed (byte* srcPtr = data)
         {
-          byte* src = srcPtr;
-          byte* dest = (byte*)bmpData.Scan0;
+          byte* srcBase = srcPtr;
+          byte* destBase = (byte*)bmpData.Scan0;
+
           for (int y = 0; y < height; y++)
           {
-            Buffer.MemoryCopy(src, dest, dstStride, srcStride);
-            src += srcStride;
-            dest += dstStride;
+            byte* srcRow = srcBase + (y * srcStride);
+            byte* destRow = destBase + (y * dstStride);
+
+            for (int x = 0; x < width; x++)
+            {
+              int srcIndex = x * 3;
+              int destIndex = x * 3;
+
+              byte r = srcRow[srcIndex];
+              byte g = srcRow[srcIndex + 1];
+              byte b = srcRow[srcIndex + 2];
+
+              destRow[destIndex] = b;         // B
+              destRow[destIndex + 1] = g;     // G
+              destRow[destIndex + 2] = r;     // R
+            }
           }
         }
       }
