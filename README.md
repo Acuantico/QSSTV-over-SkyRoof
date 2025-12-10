@@ -24,4 +24,4 @@ Add-on para integrar QSSTV dentro de SkyRoof y así recibir y decodificar imáge
    ```
    El ejecutable resultante quedará en `install\SkyRoof_QSSTV_Plugin_Setup.exe`.
 
-Si prefieres evitar la compilación local, puedes descargar el instalador ya generado en [acuanticopower.com/qsstv-over-skiroof](https://acuanticopower.com/qsstv-over-skiroof).
+Si prefieres evitar la compilación local, puedes descargar el instalador ya generado en [acuanticopower.com/qsstv-over-skiroof](https://acuanticopower.com/qsstv-over-skyroof-plugin/).
