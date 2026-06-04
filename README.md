@@ -1,3 +1,12 @@
+# QSSTV over SkyRoof
+
+> [!IMPORTANT]
+> Proyecto descontinuado.
+>
+> Este repositorio queda disponible solo como base o referencia para quien quiera estudiar o adaptar la idea.
+> Ya no es compatible con las versiones actuales de SkyRoof y no recibirá mantenimiento activo.
+
+
 # QSSTV-over-SkyRoof
 
 Add-on para integrar QSSTV dentro de SkyRoof y así recibir y decodificar imágenes SSTV directamente en la plataforma.
